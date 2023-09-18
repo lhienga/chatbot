@@ -187,7 +187,6 @@
   align-items: center;
   justify-content: center;
   /*padding:  0.75rem 0 !important;*/
-
 }
 .chatbot-name{
   position: absolute;
@@ -302,102 +301,38 @@
 
 }
 
-
-.msg_time{
-	position: absolute;
-	left: 0;
-	bottom: -15px;
-	color: rgba(255,255,255,0.5);
-	font-size: 10px;
-}
-.msg_time_send{
-	position: absolute;
-	right:0;
-	bottom: -15px;
-	color: rgba(255,255,255,0.5);
-	font-size: 10px;
-}
 .msg_head{
 	position: relative;
 }
 
+
+.bot-frame {
+  max-width: 70%;
+  height: auto;
+  margin-top: 1%;
+  margin-bottom: auto;
+  margin-left: 5%;
+  border-radius: var(--br-7xs);
+  background-color: var(--color-orchid);
+  padding: 10px;
+  position: relative;
+  margin-right: auto; /* Align to the right */
+  word-break: break-word;
+  overflow-wrap: break-word; /* Add this property */
+}
+.bot-text {
+  align-self: stretch;
+  position: relative;
+  line-height: 22px;
+  word-break: break-word;
+  overflow-wrap: break-word; /* Add this property */
+}
 .bot-logo-icon1{
   position: absolute;
   top: 185.83px;
   left: 19px;
   width: 56.09px;
   height: 47.33px;
-}
-
-.my-text-box-child {
-  top: 0;
-  left: 0;
-  border-radius: var(--br-7xs);
-  background-color: var(--color-orchid);
-  height: 30.03px;
-}
-.my-text,
-.my-text-box,
-.my-text-box-child {
-  position: relative;
-  width: 159.55px;
-}
-.my-text {
-  top: 5.54px;
-  left: 0;
-  display: inline-block;
-  height: 15.78px;
-}
-.my-text-box {
-  top: 97px;
-  left: 346px;
-  height: 30.03px;
-  text-align: center;
-  font-size: var(--font-size-mini);
-}
-.my-text-box-item {
-  
-  top: 0;
-  left:100%;
-  border-radius: var(--br-7xs);
-  background-color: var(--color-orchid);
-  height: 30.03px;
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 4px;
-}
-.my-text-box1{
-  position: absolute;
-  top: 10%;
-  width: 169.53px;
-  text-align: center;
-  font-size: var(--font-size-mini);
-  top: 50%; /* Position from the top 50% of the parent */
-  right: 0; /* Align to the right edge of the parent */
-  transform: translateY(-50%); /* Vertically center the child */
-  padding: 3%;
-}
-.my-text1 {
-  position: absolute;
-  width: 169.53px;
-}
-.my-text1 {
-  top: 7px;
-  left: 0;
-  display: inline-block;
-  height: 15.78px;
-}
-
-.bot-text {
-  align-self: stretch;
-  position: relative;
-  line-height: 22px;
-}
-.bot-frame-child {
-  position: relative;
-  background-color: var(--others-borders);
-  width: 319px;
-  height: 2px;
 }
 .iconoutlinelike {
   position: relative;
@@ -438,24 +373,9 @@
   justify-content: space-between;
   color: var(--black-and-white-black);
 }
-.bot-frame {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: var(--br-xs) var(--br-xs) var(--br-xs) var(--br-9xs);
-  background-color: var(--color-white);
-  width: 256px;
-  height: 103px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: var(--padding-xs);
-  box-sizing: border-box;
-  align-items: flex-start;
-  justify-content: center;
-  gap: var(--gap-base);
-}
-.bot-text-box,
+
+
+
 .like-dislike-icon {
   position: absolute;
   top: 76px;
@@ -463,15 +383,7 @@
   width: 50px;
   height: 22px;
 }
-.bot-text-box {
-  top: 157px;
-  left: 81.3px;
-  width: 256px;
-  height: 103px;
-  font-size: var(--app-body-size);
-  color: var(--typography-body);
-  font-family: var(--app-body);
-}
+
 .iconoutlinelike-group {
   display: none;
   flex-direction: row;
