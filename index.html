@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400&display=swap"
+    />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="chat">
+      <div class="image">
+        <div class="image-box">
+          <div class="image-box-head">
+            <div class="your-image">Your image</div>
+          </div>
+          <div id="imageFormeight" class="image-place">
+            <!--
+            <img src='https://cf.ltkcdn.net/kids/images/std/236793-1600x1200-titanic.jpg' alt="Flowers in Chania">
+            -->
+          </div>
+          <div class="url-place">
+            <div class="paste-you-images-container">
+              <form id="urlArea" class="input-group">
+                <input type="text" id="url" name="img_url" placeholder="Place your image URL..." autocomplete="off" class="form-control type_msg" required/>
+                <button type = "submit" id = "send" class="send_btn"><i class="fas fa-location-arrow"></i></button>
+              </form>
+              
+            </div>
+            
+            
+          </div>
+          
+          
+        </div>
+        
+      </div>
+
+      <div class="chat1">
+        <div class = "messages">
+          <div id="messageFormeight" class="chat-box msg_card_body">
+            <div class="msg_cotainer_send">hihmmmlllllllllllllllllllllihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_bot">hihsjkaheuihuwehuhsuahehubsuie    kljlk    k kjklj kjlkjkljkljkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkohhihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_bot">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_bot">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_bot">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hihihi</div>
+            <div class="msg_cotainer_send">hsjkaheuihuwehuhsuahehubsuie    kljlk    k kjklj kjlkjkljkljkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkohaeohisihihi</div>
+
+        </div>
+
+        <div class="chat-area">
+          <form id="messageArea" class="input-group">
+            <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
+            <button type = "submit" id = "send1" class="send_btn"><i class="fas fa-location-arrow"></i></button>
+          </form>
+        </div>
+
+        <div class="chat-box-head">
+          <div class="chatbot-name">ChatBot</div>
+          <div class="online">online</div>
+          <div class="circle"></div>
+          <img class="bot-logo-icon" alt="" src="./public/group-1.svg" /></div>
+        </div>
+<!-- 
+        <div class = "message">
+            <img class="bot-logo-icon1" alt="" src="./public/group-4.svg" />
+            <div class="bot-text-box">
+              <div class="bot-frame">
+                <div class="bot-text">I am fine!</div>
+                <div class="bot-frame-child"></div>
+                <div class="iconoutlinelike-parent">
+                  <button
+                    class="like_btn"
+                    alt=""
+                    src="./public/iconoutlinelike.svg"
+                  ><img src="./public/iconoutlinelike.svg"></img></button>
+                  <button
+                    class="dislike_btn"
+                    alt=""
+                    src="./public/iconfilldislike.svg"
+                  ><img src="./public/iconfilldislike.svg"></img></button></div>
+              </div>
+            </div>
+          
+          
+        </div>
+        
+        
+        
+        <div class="my-text-box">
+          <div class="my-text-box-child"></div>
+          <div class="my-text">How are you?</div>
+        </div>
+        <div class="my-text-box1">
+          <div class="my-text-box-item"></div>
+          <div class="my-text1">Where are you?</div>
+        </div>
+        -->   
+        </div>
+      </div>
+    </div>
+    <script>
+			$(document).ready(function() {
+        $("#urlArea").on("submit", function(event) {
+					var url = $("#url").val();
+					// Check if an image is selected
+					//var imageInput = document.getElementById("image-upload");
+					//var imageFile = imageInput.files[0];
+					//var imageData = null;
+					var userImg = '<img src='+url+' alt="Flowers in Chania">'
+					$("#imageFormeight").append(userImg);
+          // Prevent the form from submitting
+					event.preventDefault();
+        });
+				$("#messageArea").on("submit", function(event) {
+					const date = new Date();
+					const hour = date.getHours();
+					const minute = date.getMinutes();
+					const str_time = hour + ":" + minute;
+					var rawText = $("#text").val();
+					//var url = $("#url").val();
+					// Check if an image is selected
+					//var imageInput = document.getElementById("image-upload");
+					//var imageFile = imageInput.files[0];
+					//var imageData = null;
+          sendMessage(rawText, str_time);
+          event.preventDefault();
+
+					if (url) {
+						sendMessage(rawText, url, str_time);
+						/*
+						// Read the image data as a base64-encoded string
+						var reader = new FileReader();
+						reader.onload = function(event) {
+							imageData = event.target.result;
+		
+							// Send both text and image data to the server
+							sendMessage(rawText, imageData, str_time);
+						};
+						reader.readAsDataURL(imageFile);
+		
+						// Clear the input field after processing
+						imageInput.value = "";
+						*/
+					} else {
+						// No image selected, send only text
+						sendMessage(rawText, null, str_time);
+					}
+		
+					// Prevent the form from submitting
+					event.preventDefault();
+				});
+
+				function uploadImage(imageInput){
+					$ajax({
+						data: {
+							image: imageInput
+						},
+						type: "POST", 
+						url: "/getimg"
+					}).done(function(data){
+						print(data)
+					})
+				};
+		
+				function sendMessage(rawText, str_time) {
+					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">' + str_time + '</span></div><div class="img_cont_msg"></div></div>';
+		
+					$("#text").val("");
+					$("#messageFormeight").append(userHtml);
+		
+					// Send data to the server via AJAX
+					$.ajax({
+						data: {
+							msg: rawText,
+							//url: url, // Pass the image data
+						},
+						type: "POST",
+						url: "/get",
+					}).done(function(data) {
+						//var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
+						$("#messageFormeight").append($.parseHTML(botHtml));
+					});
+				}
+			});
+		</script>
+  </body>
+</html>

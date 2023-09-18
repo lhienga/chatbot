@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+:root {
+  /* fonts */
+  --app-body: Rubik;
+  --font-roboto: Roboto;
+
+  /* font sizes */
+  --app-body-size: 17px;
+  --font-size-mini: 15px;
+  --font-size-base: 16px;
+
+  /* Colors */
+  --color-white: #fff;
+  --color-gray-100: #fafafa;
+  --black-and-white-black: #100f0d;
+  --others-borders: #e9e4d1;
+  --typography-body: #403e39;
+  --color-orchid: #ba68c8;
+  --color-dimgray: #5e5e5e;
+  --color-darkgray: #acacac;
+
+  /* Gaps */
+  --gap-base: 16px;
+  --gap-8xs: 5px;
+  --gap-xs: 12px;
+
+  /* Paddings */
+  --padding-xs: 12px;
+
+  /* Border radiuses */
+  --br-xs: 12px;
+  --br-9xs: 4px;
+  --br-7xs: 6px;
+  --br-6xl: 25px;
+}
