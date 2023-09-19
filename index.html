@@ -49,75 +49,22 @@
       <div class="chat1">
         <div class = "messages">
           <div id="messageFormeight" class="chat-box msg_card_body">
-            <div class="msg_cotainer_send">hihmmmlllllllllllllllllllllihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_bot">hihsjkaheuihuwehuhsuahehubsuie    kljlk    k kjklj kjlkjkljkljkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkohhihi
-            </div>
-            <div class="msg_cotainer_send">hihihi</div>
-            
-     
-            <div class="bot-frame">
-              <div class="bot-text">I am finennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn!</div>
-              <div class="iconoutlinelike-parent">
-                <button
-                  class="like_btn"
-                  alt=""
-                  src="./public/iconoutlinelike.svg"
-                ><img src="./public/iconoutlinelike.svg"></img></button>
-                <button
-                  class="dislike_btn"
-                  alt=""
-                  src="./public/iconfilldislike.svg"
-                ><img src="./public/iconfilldislike.svg"></img></button>
-              </div>
-            </div>
-          
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="bot-frame">
-              <div class="bot-text">I am finennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn!</div>
-              <div class="iconoutlinelike-parent">
-                <button
-                  class="like_btn"
-                  alt=""
-                  src="./public/iconoutlinelike.svg"
-                ><img src="./public/iconoutlinelike.svg"></img></button>
-                <button
-                  class="dislike_btn"
-                  alt=""
-                  src="./public/iconfilldislike.svg"
-                ><img src="./public/iconfilldislike.svg"></img></button>
-              </div>
-            </div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_bot">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_bot">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_bot">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hihihi</div>
-            <div class="msg_cotainer_send">hsjkaheuihuwehuhsuahehubsuie    kljlk    k kjklj kjlkjkljkljkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkohaeohisihihi</div>
 
-        </div>
+          </div>
 
-        <div class="chat-area">
-          <form id="messageArea" class="input-group">
-            <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
-            <button type = "submit" id = "send1" class="send_btn"><i class="fas fa-location-arrow"></i></button>
-          </form>
-        </div>
+          <div class="chat-area">
+            <form id="messageArea" class="input-group">
+              <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
+              <button type = "submit" id = "send1" class="send_btn"><i class="fas fa-location-arrow"></i></button>
+            </form>
+          </div>
 
-        <div class="chat-box-head">
-          <div class="chatbot-name">ChatBot</div>
-          <div class="online">online</div>
-          <div class="circle"></div>
-          <img class="bot-logo-icon" alt="" src="./public/group-1.svg" /></div>
+          <div class="chat-box-head">
+            <div class="chatbot-name">ChatBot</div>
+            <div class="online">online</div>
+            <div class="circle"></div>
+            <img class="bot-logo-icon" alt="" src="./public/group-1.svg" />
+          </div>
         </div>
 
 
@@ -207,7 +154,7 @@
 				};
 		
 				function sendMessage(rawText, str_time) {
-					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">' + str_time + '</span></div><div class="img_cont_msg"></div></div>';
+					var userHtml = '<div class="bot-text">'+ rawText+'</div>';
 		
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
@@ -221,7 +168,8 @@
 						type: "POST",
 						url: "/get",
 					}).done(function(data) {
-						//var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
+						var botHtml = 
+            '<div class="bot-frame"><div class="bot-text">'+data+'</div><div class="iconoutlinelike-parent"><buttonclass="like_btn"alt=""src="./public/iconoutlinelike.svg"><img src="./public/iconoutlinelike.svg"></img></button><button class="dislike_btn" alt="" src="./public/iconfilldislike.svg"><img src="./public/iconfilldislike.svg"></img></button></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
 					});
 				}

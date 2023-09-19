@@ -7,12 +7,12 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 import requests
 
-tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
-model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
-#model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
-#processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
-
+#tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
+#model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
+processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
