@@ -103,21 +103,18 @@
 					event.preventDefault();
         });
 				$("#messageArea").on("submit", function(event) {
-					const date = new Date();
-					const hour = date.getHours();
-					const minute = date.getMinutes();
-					const str_time = hour + ":" + minute;
+				
 					var rawText = $("#text").val();
 					//var url = $("#url").val();
 					// Check if an image is selected
 					//var imageInput = document.getElementById("image-upload");
 					//var imageFile = imageInput.files[0];
 					//var imageData = null;
-          sendMessage(rawText, str_time);
+          //sendMessage(rawText, str_time);
           event.preventDefault();
 
 					if (url) {
-						sendMessage(rawText, url, str_time);
+						sendMessage(rawText, url);
 						/*
 						// Read the image data as a base64-encoded string
 						var reader = new FileReader();
@@ -134,7 +131,7 @@
 						*/
 					} else {
 						// No image selected, send only text
-						sendMessage(rawText, null, str_time);
+						sendMessage(rawText, null);
 					}
 		
 					// Prevent the form from submitting
@@ -153,7 +150,7 @@
 					})
 				};
 		
-				function sendMessage(rawText, str_time) {
+				function sendMessage(rawText, url) {
 					var userHtml = '<div class="bot-text">'+ rawText+'</div>';
 		
 					$("#text").val("");
@@ -163,7 +160,7 @@
 					$.ajax({
 						data: {
 							msg: rawText,
-							//url: url, // Pass the image data
+							url: url, // Pass the image data
 						},
 						type: "POST",
 						url: "/get",
