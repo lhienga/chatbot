@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-    <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="../static/global.css" />
+    <link rel="stylesheet" href="../static/index.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap"
@@ -49,7 +49,15 @@
       <div class="chat1">
         <div class = "messages">
           <div id="messageFormeight" class="chat-box msg_card_body">
-
+            <!--
+            <div class="bot-frame">
+              <div class="bot-text">BBBBBBBBBBBBBBdata</div>
+              <div class="iconoutlinelike-parent">
+                <button class="like_btn" alt=""><i class="fas fa-thumbs-up"></i></button>
+                <button class="dislike_btn" alt=""><i class="fas fa-thumbs-down"></i></button>
+              </div>
+            </div>
+            -->
           </div>
 
           <div class="chat-area">
@@ -63,7 +71,7 @@
             <div class="chatbot-name">ChatBot</div>
             <div class="online">online</div>
             <div class="circle"></div>
-            <img class="bot-logo-icon" alt="" src="./public/group-1.svg" />
+            <img class="bot-logo-icon" alt="" src="static/images/group-1.svg" />
           </div>
         </div>
 
@@ -103,19 +111,19 @@
 					event.preventDefault();
         });
 				$("#messageArea").on("submit", function(event) {
-				
+          var url = $("#url").val();
 					var rawText = $("#text").val();
 					//var url = $("#url").val();
 					// Check if an image is selected
 					//var imageInput = document.getElementById("image-upload");
 					//var imageFile = imageInput.files[0];
 					//var imageData = null;
-          //sendMessage(rawText, str_time);
+          sendMessage(rawText, url);
           event.preventDefault();
-
+          /*
 					if (url) {
 						sendMessage(rawText, url);
-						/*
+						
 						// Read the image data as a base64-encoded string
 						var reader = new FileReader();
 						reader.onload = function(event) {
@@ -128,15 +136,18 @@
 		
 						// Clear the input field after processing
 						imageInput.value = "";
-						*/
+						
 					} else {
 						// No image selected, send only text
 						sendMessage(rawText, null);
 					}
-		
+		*/
 					// Prevent the form from submitting
-					event.preventDefault();
-				});
+					//event.preventDefault();
+				}
+        );
+        
+
 
 				function uploadImage(imageInput){
 					$ajax({
@@ -151,7 +162,7 @@
 				};
 		
 				function sendMessage(rawText, url) {
-					var userHtml = '<div class="bot-text">'+ rawText+'</div>';
+					var userHtml = '<div class="msg_container_send">'+ rawText+'</div>';
 		
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
@@ -165,8 +176,7 @@
 						type: "POST",
 						url: "/get",
 					}).done(function(data) {
-						var botHtml = 
-            '<div class="bot-frame"><div class="bot-text">'+data+'</div><div class="iconoutlinelike-parent"><buttonclass="like_btn"alt=""src="./public/iconoutlinelike.svg"><img src="./public/iconoutlinelike.svg"></img></button><button class="dislike_btn" alt="" src="./public/iconfilldislike.svg"><img src="./public/iconfilldislike.svg"></img></button></div></div>';
+						var botHtml = '<div class="bot-frame"><div class="bot-text">BBBBBBBBBBBBBBdata</div><div class="iconoutlinelike-parent"><button class="like_btn" alt=""><i class="fas fa-thumbs-up"></i></button><button class="dislike_btn" alt=""><i class="fas fa-thumbs-down"></i></button></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
 					});
 				}
