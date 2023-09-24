@@ -6,11 +6,13 @@ import torch
 from PIL import Image
 from werkzeug.utils import secure_filename
 import requests
+import pandas as pd
 
 #tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
 #model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
 #model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
 #processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
+
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
@@ -43,16 +45,20 @@ def upload_image():
       
 @app.route("/sendfeedback", methods=["GET", "POST"])
 def saveFeedback():
+    global data
     fb = request.form["feedback"]
-    id = request.form["id"]
-    #print("hiasdsaf feedback")
+    id = int(request.form["id"])
+    data.loc[id-1, 'feedback'] = fb
+    print("hiasdsaf feedback", fb)
     return "feedback saved!"
 
 @app.route("/get", methods=["GET", "POST"])
 def chat():
+    global data
     id = request.form["id"]
     msg = request.form["msg"]
     url = request.form["url"]
+    
     if 'image' in request.files:
         img = request.files['image']
         img.save("uploaded_image.jpg")
@@ -66,7 +72,11 @@ def chat():
     #img = Image.open("test/20221218_205725.jpg").convert('RGB')
     print("opened img")
     #img = Image.fromarray(img).convert('RGB')
-    return get_Chat_response(input, img)
+    
+    ans = get_Chat_response(input, img)
+    new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None}
+    data = data.append(new, ignore_index = True)
+    return ans
 
 
 def get_Chat_response(text, img):
@@ -102,4 +112,9 @@ def get_Chat_response(text, img):
 
 
 if __name__ == '__main__':
+    global data
+
+    data = pd.DataFrame(columns = ["id", "image_url", "user_message", "bot_message", "feedback"])
     app.run()
+    
+    data.to_csv("response.csv")

@@ -107,7 +107,7 @@
           const dislikeButton = likeButton.siblings('.dislike_btn');
           const responseContainer = likeButton.closest('.bot-frame');
           const feedback = "like";
-          const botFrameId = responseContainer.attr('id');
+          const botFrameId = responseContainer.attr('data-response-id');
           
           // Toggle the filled/unfilled icon for like button
           likeButton.find('i').toggleClass('far fa-thumbs-up fas fa-thumbs-up');
@@ -134,7 +134,7 @@
           const likeButton = dislikeButton.siblings('.like_btn');
           const responseContainer = dislikeButton.closest('.bot-frame');
           const feedback = "dislike";
-          const botFrameId = responseContainer.attr('id');
+          const botFrameId = responseContainer.attr('data-response-id');
           
           // Toggle the filled/unfilled icon for dislike button
           dislikeButton.find('i').toggleClass('far fa-thumbs-down fas fa-thumbs-down');
