@@ -16,6 +16,7 @@
     />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   </head>
   <body>
     <div class="chat">
@@ -49,15 +50,15 @@
       <div class="chat1">
         <div class = "messages">
           <div id="messageFormeight" class="chat-box msg_card_body">
-            <!--
+            
             <div class="bot-frame">
               <div class="bot-text">BBBBBBBBBBBBBBdata</div>
               <div class="iconoutlinelike-parent">
-                <button class="like_btn" alt=""><i class="fas fa-thumbs-up"></i></button>
-                <button class="dislike_btn" alt=""><i class="fas fa-thumbs-down"></i></button>
+                <button type = "button" id = "like_btn" class="like_btn" alt=""><i class="fas fa-thumbs-up"></i></button>
+                <button type = "button" id = "dislike_btn" class="dislike_btn" alt=""><i class="fas fa-thumbs-down"></i></button>
               </div>
             </div>
-            -->
+            
           </div>
 
           <div class="chat-area">
@@ -74,6 +75,8 @@
             <img class="bot-logo-icon" alt="" src="static/images/group-1.svg" />
           </div>
         </div>
+        <div id="floating-message" class="floating-message"></div>
+
 
 
             
@@ -98,57 +101,100 @@
       </div>
     </div>
     <script>
+      $(document).ready(function() {
+        function handleLikeButtonClick(event) {
+          const likeButton = $(event.target);
+          const dislikeButton = likeButton.siblings('.dislike_btn');
+          const responseContainer = likeButton.closest('.bot-frame');
+          const feedback = "like";
+          const botFrameId = responseContainer.attr('id');
+          
+          // Toggle the filled/unfilled icon for like button
+          likeButton.find('i').toggleClass('far fa-thumbs-up fas fa-thumbs-up');
+          
+          // If dislike button is filled, toggle it to unfilled
+          if (dislikeButton.find('i').hasClass('fas')) {
+              dislikeButton.find('i').toggleClass('fas far');
+          }
+
+          // Send data to the server via AJAX
+					$.ajax({
+						data: {
+              id: botFrameId,
+							feedback: feedback,
+						},
+						type: "POST",
+						url: "/sendfeedback",
+					}).done(function(data) {
+					});
+      }
+
+      function handleDislikeButtonClick(event) {
+          const dislikeButton = $(event.target);
+          const likeButton = dislikeButton.siblings('.like_btn');
+          const responseContainer = dislikeButton.closest('.bot-frame');
+          const feedback = "dislike";
+          const botFrameId = responseContainer.attr('id');
+          
+          // Toggle the filled/unfilled icon for dislike button
+          dislikeButton.find('i').toggleClass('far fa-thumbs-down fas fa-thumbs-down');
+          
+          // If like button is filled, toggle it to unfilled
+          if (likeButton.find('i').hasClass('fas')) {
+              likeButton.find('i').toggleClass('fas far');
+          }
+
+          // Send data to the server via AJAX
+					$.ajax({
+						data: {
+              id: botFrameId,
+							feedback: feedback,
+						},
+						type: "POST",
+						url: "/sendfeedback",
+					}).done(function(data) {
+            console.log(data);
+					});
+          //showFloatingMessage('Liked!');
+      }
+      /*
+      function showFloatingMessage(message) {
+          const floatingMessage = document.getElementById('floating-message');
+          floatingMessage.innerText = message;
+          floatingMessage.style.display = 'block';
+
+          // Hide the message after a delay
+          setTimeout(() => {
+              floatingMessage.style.display = 'none';
+          }, 2000);  // Adjust the delay (in milliseconds) as needed
+          //showFloatingMessage('Disliked!');
+      }
+      */
+
+
+        // Event delegation for dynamically added like and dislike buttons
+        $("#messageFormeight").on("click", ".like_btn", handleLikeButtonClick);
+        $("#messageFormeight").on("click", ".dislike_btn", handleDislikeButtonClick);
+      });
 			$(document).ready(function() {
+        let responseCounter = 0;
+        
         $("#urlArea").on("submit", function(event) {
 					var url = $("#url").val();
-					// Check if an image is selected
-					//var imageInput = document.getElementById("image-upload");
-					//var imageFile = imageInput.files[0];
-					//var imageData = null;
 					var userImg = '<img src='+url+' alt="Flowers in Chania">'
 					$("#imageFormeight").append(userImg);
-          // Prevent the form from submitting
+          
+
 					event.preventDefault();
         });
 				$("#messageArea").on("submit", function(event) {
           var url = $("#url").val();
 					var rawText = $("#text").val();
-					//var url = $("#url").val();
-					// Check if an image is selected
-					//var imageInput = document.getElementById("image-upload");
-					//var imageFile = imageInput.files[0];
-					//var imageData = null;
           sendMessage(rawText, url);
           event.preventDefault();
-          /*
-					if (url) {
-						sendMessage(rawText, url);
-						
-						// Read the image data as a base64-encoded string
-						var reader = new FileReader();
-						reader.onload = function(event) {
-							imageData = event.target.result;
-		
-							// Send both text and image data to the server
-							sendMessage(rawText, imageData, str_time);
-						};
-						reader.readAsDataURL(imageFile);
-		
-						// Clear the input field after processing
-						imageInput.value = "";
-						
-					} else {
-						// No image selected, send only text
-						sendMessage(rawText, null);
-					}
-		*/
-					// Prevent the form from submitting
-					//event.preventDefault();
 				}
         );
-        
-
-
+           
 				function uploadImage(imageInput){
 					$ajax({
 						data: {
@@ -163,6 +209,8 @@
 		
 				function sendMessage(rawText, url) {
 					var userHtml = '<div class="msg_container_send">'+ rawText+'</div>';
+          console.log("dhididhidhsihao");
+          responseCounter++;
 		
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
@@ -170,17 +218,23 @@
 					// Send data to the server via AJAX
 					$.ajax({
 						data: {
+              id: responseCounter,
 							msg: rawText,
 							url: url, // Pass the image data
 						},
 						type: "POST",
 						url: "/get",
 					}).done(function(data) {
-						var botHtml = '<div class="bot-frame"><div class="bot-text">BBBBBBBBBBBBBBdata</div><div class="iconoutlinelike-parent"><button class="like_btn" alt=""><i class="fas fa-thumbs-up"></i></button><button class="dislike_btn" alt=""><i class="fas fa-thumbs-down"></i></button></div></div>';
+						var botHtml = '<div class="bot-frame" data-response-id="'+ responseCounter.toString()+'"><div class="bot-text">'+data+'</div><div class="iconoutlinelike-parent"><button id = "like_btn'+ responseCounter.toString()+'" class="like_btn" alt=""><i class="far fa-thumbs-up"></i></button><button id = "dislike_btn'+ responseCounter.toString()+'" class="dislike_btn" alt=""><i class="far fa-thumbs-down"></i></button></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
 					});
 				}
+        
+
 			});
+      
+
+
 		</script>
   </body>
 </html>

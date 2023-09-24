@@ -40,9 +40,17 @@ def upload_image():
 	else:
 		print('Allowed image types are -> png, jpg, jpeg, gif')
 		return redirect(request.url)
+      
+@app.route("/sendfeedback", methods=["GET", "POST"])
+def saveFeedback():
+    fb = request.form["feedback"]
+    id = request.form["id"]
+    #print("hiasdsaf feedback")
+    return "feedback saved!"
 
 @app.route("/get", methods=["GET", "POST"])
 def chat():
+    id = request.form["id"]
     msg = request.form["msg"]
     url = request.form["url"]
     if 'image' in request.files:
@@ -78,7 +86,7 @@ def get_Chat_response(text, img):
                                     repetition_penalty=1.5,
                                     length_penalty=1.0,
                                     temperature=1,
-                                    )
+                                )
         print("generated!!!!!!!!!!")
         generated_text = processor.batch_decode(outputs, skip_special_tokens=True)[0].strip()
         '''
