@@ -116,6 +116,7 @@
           if (dislikeButton.find('i').hasClass('fas')) {
               dislikeButton.find('i').toggleClass('fas far');
           }
+          event.preventDefault();
 
           // Send data to the server via AJAX
 					$.ajax({
@@ -127,7 +128,7 @@
 						url: "/sendfeedback",
 					}).done(function(data) {
 					});
-          event.preventDefault();
+          
 
       }
 
@@ -146,6 +147,7 @@
               likeButton.find('i').toggleClass('fas far');
           }
 
+          event.preventDefault();
           // Send data to the server via AJAX
 					$.ajax({
 						data: {
@@ -158,7 +160,7 @@
             console.log(data);
 					});
           //showFloatingMessage('Liked!');
-          event.preventDefault();
+          
 
       }
       /*
