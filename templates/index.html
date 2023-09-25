@@ -127,6 +127,8 @@
 						url: "/sendfeedback",
 					}).done(function(data) {
 					});
+          event.preventDefault();
+
       }
 
       function handleDislikeButtonClick(event) {
@@ -156,6 +158,8 @@
             console.log(data);
 					});
           //showFloatingMessage('Liked!');
+          event.preventDefault();
+
       }
       /*
       function showFloatingMessage(message) {
