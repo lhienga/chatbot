@@ -103,7 +103,7 @@ def get_Chat_response(text, img):
         
         #response = model.generate({"image": image, "prompt": prompt})[0]
         # encode the new user input, add the eos_token and return a tensor in Pytorch
-        #print(generated_text)
+        print(generated_text)
         
         
         # pretty print last ouput tokens from bot
