@@ -107,7 +107,7 @@ def get_Chat_response(text, img):
         
         
         # pretty print last ouput tokens from bot
-        return "hihihihi"
+        return generated_text
     #generated_text
 
 
