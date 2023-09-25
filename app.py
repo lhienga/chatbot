@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask import Flask, flash, request, redirect, url_for, render_template
 import os
-#from transformers import AutoModelForCausalLM, AutoTokenizer, InstructBlipProcessor, InstructBlipForConditionalGeneration
+from transformers import AutoModelForCausalLM, AutoTokenizer, InstructBlipProcessor, InstructBlipForConditionalGeneration
 import torch
 from PIL import Image
 from werkzeug.utils import secure_filename
@@ -10,8 +10,8 @@ import pandas as pd
 
 #tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
 #model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
-#model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
-#processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
+model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
+processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -82,10 +82,10 @@ def chat():
 def get_Chat_response(text, img):
 
     # Let's chat for 5 lines
-    for step in range(5):
+    for step in range(1000):
         #inputs = processor(images=img, text=text, return_tensors="pt")
         print("generating output.........")
-        '''
+        
         outputs = model.generate(
                                     **inputs,
                                     do_sample=False,
@@ -99,7 +99,7 @@ def get_Chat_response(text, img):
                                 )
         print("generated!!!!!!!!!!")
         generated_text = processor.batch_decode(outputs, skip_special_tokens=True)[0].strip()
-        '''
+    
         
         #response = model.generate({"image": image, "prompt": prompt})[0]
         # encode the new user input, add the eos_token and return a tensor in Pytorch
