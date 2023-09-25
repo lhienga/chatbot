@@ -83,7 +83,7 @@ def get_Chat_response(text, img):
 
     # Let's chat for 5 lines
     for step in range(1000):
-        #inputs = processor(images=img, text=text, return_tensors="pt")
+        inputs = processor(images=img, text=text, return_tensors="pt")
         print("generating output.........")
         
         outputs = model.generate(
