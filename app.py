@@ -16,6 +16,9 @@ import time
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
+# Path to save the CSV file
+CSV_FILE_PATH = "response.csv"
+
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -47,9 +50,11 @@ def upload_image():
 @app.route("/sendfeedback", methods=["GET", "POST"])
 def saveFeedback():
     global data
+    global start
     fb = request.form["feedback"]
     id = int(request.form["id"])
-    data.loc[id-1, 'feedback'] = fb
+    data.loc[start+id, 'feedback'] = fb
+    data.to_csv(CSV_FILE_PATH, index=False)  # Save to CSV
     print("hiasdsaf feedback", fb)
     return "feedback saved!"
 
@@ -77,6 +82,7 @@ def chat():
     ans = get_Chat_response(input, img)
     new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None}
     data = data.append(new, ignore_index = True)
+    data.to_csv(CSV_FILE_PATH, index=False)  # Save to CSV
     return ans
 
 
@@ -117,8 +123,14 @@ def get_Chat_response(text, img):
 
 if __name__ == '__main__':
     global data
+    global start
+    data = pd.DataFrame(columns=["id", "image_url", "user_message", "bot_message", "feedback"])
 
-    data = pd.DataFrame(columns = ["id", "image_url", "user_message", "bot_message", "feedback"])
+    # Load data from existing CSV file if available
+    if os.path.exists(CSV_FILE_PATH):
+        data = pd.read_csv(CSV_FILE_PATH)
+    start = data.shape[0] -1
     app.run()
-    
-    data.to_csv("response.csv")
+
+    # Save the final data to CSV before the program ends
+    data.to_csv(CSV_FILE_PATH, index=False)
