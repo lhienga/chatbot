@@ -99,104 +99,69 @@
     </div>
     <script>
       $(document).ready(function() {
-        function handleLikeButtonClick(event) {
-          const likeButton = $(event.target);
-          const dislikeButton = likeButton.siblings('.dislike_btn');
-          const responseContainer = likeButton.closest('.bot-frame');
-          const feedback = "like";
-          const botFrameId = responseContainer.attr('data-response-id');
-          
-          // Toggle the filled/unfilled icon for like button
-          likeButton.find('i').toggleClass('far fa-thumbs-up fas fa-thumbs-up');
-          
-          // If dislike button is filled, toggle it to unfilled
-          if (dislikeButton.find('i').hasClass('fas')) {
-              dislikeButton.find('i').toggleClass('fas far');
-          }
-          event.preventDefault();
+    function handleButtonClick(button) {
+        const isLikeButton = button.hasClass('like_btn');
+        const responseContainer = button.closest('.bot-frame');
+        const feedback = isLikeButton ? 'like' : 'dislike';
+        const botFrameId = responseContainer.attr('data-response-id');
 
-          // Send data to the server via AJAX
-					$.ajax({
-						data: {
-              id: botFrameId,
-							feedback: feedback,
-						},
-						type: "POST",
-						url: "/sendfeedback",
-					}).done(function(data) {
-					});
-          
+        // Toggle the filled/unfilled icon
+        button.find('i').toggleClass('far fas');
 
-      }
+        // Handle the opposite button
+        if (!isLikeButton) {
+            const likeButton = button.siblings('.like_btn');
+            if (likeButton.length > 0) {
+                likeButton.find('i').removeClass('fas').addClass('far');
+            }
+        }
+        else {
+            const dislikeButton = button.siblings('.dislike_btn');
+            if (dislikeButton.find('i').hasClass('fas')) {
+                dislikeButton.find('i').toggleClass('fas far');
+            }
+        }
 
-      function handleDislikeButtonClick(event) {
-          const dislikeButton = $(event.target);
-          const likeButton = dislikeButton.siblings('.like_btn');
-          const responseContainer = dislikeButton.closest('.bot-frame');
-          const feedback = "dislike";
-          const botFrameId = responseContainer.attr('data-response-id');
-          
-          // Toggle the filled/unfilled icon for dislike button
-          dislikeButton.find('i').toggleClass('far fa-thumbs-down fas fa-thumbs-down');
-          
-          // If like button is filled, toggle it to unfilled
-          if (likeButton.find('i').hasClass('fas')) {
-              likeButton.find('i').toggleClass('fas far');
-          }
+        // Send data to the server via AJAX
+        $.ajax({
+            data: {
+                id: botFrameId,
+                feedback: feedback
+            },
+            type: "POST",
+            url: "/sendfeedback",
+        }).done(function(data) {
+            console.log('Data sent to server:', data);
+        });
+    }
 
-          event.preventDefault();
-          // Send data to the server via AJAX
-					$.ajax({
-						data: {
-              id: botFrameId,
-							feedback: feedback,
-						},
-						type: "POST",
-						url: "/sendfeedback",
-					}).done(function(data) {
-            console.log(data);
-					});
-          //showFloatingMessage('Liked!');
-          
+    // Event delegation for dynamically added like and dislike buttons
+    $("#messageFormeight").on("click", ".like_btn", function() {
+        handleButtonClick($(this));
+    });
 
-      }
-      /*
-      function showFloatingMessage(message) {
-          const floatingMessage = document.getElementById('floating-message');
-          floatingMessage.innerText = message;
-          floatingMessage.style.display = 'block';
-
-          // Hide the message after a delay
-          setTimeout(() => {
-              floatingMessage.style.display = 'none';
-          }, 2000);  // Adjust the delay (in milliseconds) as needed
-          //showFloatingMessage('Disliked!');
-      }
-      */
+    $("#messageFormeight").on("click", ".dislike_btn", function() {
+        handleButtonClick($(this));
+    });
+});
 
 
-        // Event delegation for dynamically added like and dislike buttons
-        $("#messageFormeight").on("click", ".like_btn", handleLikeButtonClick);
-        $("#messageFormeight").on("click", ".dislike_btn", handleDislikeButtonClick);
-      });
 			$(document).ready(function() {
         let responseCounter = 0;
         
         $("#urlArea").on("submit", function(event) {
 					var url = $("#url").val();
-					var userImg = '<img src='+url+' alt="Flowers in Chania">'
+					var userImg = '<img src='+url+' alt="Your image">'
 					$("#imageFormeight").append(userImg);
-          
-
 					event.preventDefault();
         });
+
 				$("#messageArea").on("submit", function(event) {
           var url = $("#url").val();
 					var rawText = $("#text").val();
           sendMessage(rawText, url);
           event.preventDefault();
-				}
-        );
+				});
            
 				function uploadImage(imageInput){
 					$ajax({
@@ -235,8 +200,6 @@
         
 
 			});
-      
-
 
 		</script>
   </body>
