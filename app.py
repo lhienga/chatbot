@@ -81,7 +81,8 @@ def chat():
     
     ans = get_Chat_response(input, img)
     new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None}
-    data = data.append(new, ignore_index = True)
+    #data = data.append(new, ignore_index = True)
+    data = pd.concat([data, pd.DataFrame([new])], ignore_index=True)
     data.to_csv(CSV_FILE_PATH, index=False)  # Save to CSV
     return ans
 
