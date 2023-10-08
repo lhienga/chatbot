@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask import Flask, flash, request, redirect, url_for, render_template
 import os
-#from transformers import AutoModelForCausalLM, AutoTokenizer, InstructBlipProcessor, InstructBlipForConditionalGeneration
+from transformers import AutoModelForCausalLM, AutoTokenizer, InstructBlipProcessor, InstructBlipForConditionalGeneration
 import torch
 from PIL import Image
 from werkzeug.utils import secure_filename
@@ -11,9 +11,10 @@ import time
 
 #tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
 #model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
-#model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
-#processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
-
+model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
+processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model.to(device)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # Path to save the CSV file
@@ -61,9 +62,16 @@ def saveFeedback():
 @app.route("/get", methods=["GET", "POST"])
 def chat():
     global data
+    global history
+    global last_url
+    global start
     id = request.form["id"]
     msg = request.form["msg"]
     url = request.form["url"]
+    if url!= last_url:
+      history = []
+      start = data.shape[0] -1
+    last_url = url
     
     if 'image' in request.files:
         img = request.files['image']
@@ -72,7 +80,12 @@ def chat():
     print("url: ", url)
     img = Image.open(requests.get(url, stream=True).raw).convert("RGB")
     print(msg)
-    input = msg
+    if len(history)<3:
+      input = " ".join([" ".join(x) for x in history])
+    else:
+      input = " ".join([" ".join(x) for x in history[-3:]])
+    input = input + " " + msg
+    history.append([msg])
     #img = request.files["image"]
     #image_input = img
     #img = Image.open("test/20221218_205725.jpg").convert('RGB')
@@ -80,8 +93,10 @@ def chat():
     #img = Image.fromarray(img).convert('RGB')
     
     ans = get_Chat_response(input, img)
+    
     new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None}
-    data = data.append(new, ignore_index = True)
+    #data = data.append(new, ignore_index = True)
+    data = pd.concat([data, pd.DataFrame([new])], ignore_index=True)
     data.to_csv(CSV_FILE_PATH, index=False)  # Save to CSV
     return ans
 
@@ -91,10 +106,11 @@ def get_Chat_response(text, img):
     # Let's chat for 5 lines
     #for step in range(1000):
         #time.sleep(5)
-        #inputs = processor(images=img, text=text, return_tensors="pt")
+        global history
+        inputs = processor(images=img, text=text, return_tensors="pt").to(device)
         print("generating output.........")
-        '''
-         outputs = model.generate(
+      
+        outputs = model.generate(
                                     **inputs,
                                     do_sample=False,
                                     num_beams=5,
@@ -105,25 +121,29 @@ def get_Chat_response(text, img):
                                     length_penalty=1.0,
                                     temperature=1,
                                 )
-        '''
+        
        
         print("generated!!!!!!!!!!")
-        #generated_text = processor.batch_decode(outputs, skip_special_tokens=True)[0].strip()
-    
-        
+        generated_text = processor.batch_decode(outputs, skip_special_tokens=True)[0].strip()
+        history[-1].append(generated_text)
+        torch.cuda.empty_cache()
         #response = model.generate({"image": image, "prompt": prompt})[0]
         # encode the new user input, add the eos_token and return a tensor in Pytorch
         #print(generated_text)
         
         
         # pretty print last ouput tokens from bot
-        return "generated text"
+        return generated_text
     #generated_text
 
 
 if __name__ == '__main__':
     global data
     global start
+    global history
+    global last_url
+    history = []
+    last_url = ""
     data = pd.DataFrame(columns=["id", "image_url", "user_message", "bot_message", "feedback"])
 
     # Load data from existing CSV file if available
