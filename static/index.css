@@ -4,7 +4,7 @@
   top: 0;
   right: 0;
   width: 50%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,9 +15,9 @@
   
   position: absolute;
   top: 0;
-  left: 0;
+  left: 0%;
   width: 50%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,8 +63,8 @@
   left: 0;
   border-radius: var(--br-6xl);
   background-color: var(--color-gray-100);
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,6 +72,9 @@
 }
 .image-place {
   background-color: white;
+}
+#imageFormeight {
+  background-color: var(--color-gray-100);
 }
 
 .image-box-head {
@@ -182,8 +185,8 @@
   left: 0;
   border-radius: var(--br-6xl);
   background-color: var(--color-gray-100);
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -472,4 +475,11 @@ ssage-container {
 
 #text {
   width: 80%; /* Adjust the width as needed */
+}
+
+.submit-arrow {
+  background-color: var(--color-orchid); /* Change to your desired background color */
+  color: white; /* Change the icon color if needed */
+  padding: 10px; /* Add padding to adjust the space around the icon */
+  border-radius: 50%; /* Optional: Apply a border-radius for a rounded background */
 }
