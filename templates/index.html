@@ -31,13 +31,13 @@
             -->
           </div>
           <div class="url-place">
-            <div class="paste-you-images-container">
+            
               <form id="urlArea" class="input-group">
                 <input type="text" id="url" name="img_url" placeholder="Place your image URL..." autocomplete="off" class="form-control type_msg" required/>
                 <button type = "submit" id = "send" class="send_btn"><i class="fas fa-location-arrow"></i></button>
               </form>
               
-            </div>
+     
             
             
           </div>
@@ -66,10 +66,8 @@
           </div>
 
           <div class="chat-box-head">
-            <div class="chatbot-name">ChatBot</div>
-            <div class="online">online</div>
-            <div class="circle"></div>
-            <img class="bot-logo-icon" alt="" src="static/images/group-1.svg" />
+            <div class="chatbot-name">ChatBot</div> 
+            <i class="fas fa-solid fa-robot bot-logo-icon"></i>
           </div>
         </div>
         <div id="floating-message" class="floating-message"></div>
@@ -152,6 +150,8 @@
         $("#urlArea").on("submit", function(event) {
 					var url = $("#url").val();
 					var userImg = '<img src='+url+' alt="Your image">'
+          // Empty the existing content in #imageFormeight
+          $("#imageFormeight").empty();
 					$("#imageFormeight").append(userImg);
 					event.preventDefault();
         });
@@ -182,7 +182,7 @@
 		
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
-		
+
 					// Send data to the server via AJAX
 					$.ajax({
 						data: {
@@ -195,6 +195,8 @@
 					}).done(function(data) {
 						var botHtml = '<div class="bot-frame" data-response-id="'+ responseCounter.toString()+'"><div class="bot-text">'+data+'</div><div class="iconoutlinelike-parent"><button id = "like_btn'+ responseCounter.toString()+'" class="like_btn" alt=""><i class="far fa-thumbs-up"></i></button><button id = "dislike_btn'+ responseCounter.toString()+'" class="dislike_btn" alt=""><i class="far fa-thumbs-down"></i></button></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
+            var chatBox = document.getElementById('chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
 					});
 				}
         
