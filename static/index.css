@@ -99,6 +99,8 @@
 	border:0 !important;
 	color: black !important;
 	cursor: pointer;
+  background-color: var(--color-white);
+  border-radius: 100%;
 }
 .submit-btn-icon {
   position: absolute;
@@ -225,10 +227,12 @@
 }
 
 .bot-logo-icon {
+
   position: absolute;
   bottom: 30%;
   left: 5%;
   font-size: 150%; /* Adjust the font size as needed */
+
 }
 
 
@@ -300,7 +304,7 @@
   margin-bottom: auto;
   margin-left: 5%;
   border-radius: var(--br-7xs);
-  background-color: var(--color-orchid);
+  background-color: var(--color-dimgray);
   padding: 10px;
   position: relative;
   margin-right: auto; /* Align to the right */
@@ -321,7 +325,7 @@
   margin-bottom: auto;
   margin-left: 5%;
   border-radius: var(--br-7xs);
-  background-color: var(--color-orchid);
+  background-color: #d1d1d1;
   padding: 10px;
   position: relative;
   margin-right: auto; /* Align to the right */
@@ -329,6 +333,7 @@
   overflow-wrap: break-word; /* Add this property */
 }
 .bot-text {
+  color: black;
   align-self: stretch;
   position: relative;
   line-height: 22px;
@@ -482,4 +487,28 @@ ssage-container {
   color: white; /* Change the icon color if needed */
   padding: 10px; /* Add padding to adjust the space around the icon */
   border-radius: 50%; /* Optional: Apply a border-radius for a rounded background */
+}
+
+.like_btn, .dislike_btn {
+  background-color: var(--color-white);
+  color: blue;
+  padding: 0px; /* Adjust padding to control the button size */
+  border: 2px solid blue;
+  border-radius: 50%; /* Make the button circular */
+}
+
+.like-icon{
+  background-color: var(--color-white); /* Change to your desired background color */
+  color: black; /* Change the icon color if needed */
+  padding: 5px; /* Add padding to adjust the space around the icon */
+  border-radius: 20%; /* Optional: Apply a border-radius for a rounded background */
+
+}
+
+.dislike-icon{
+  background-color: var(--color-white); /* Change to your desired background color */
+  color: black ; /* Change the icon color if needed */
+  padding: 5px; /* Add padding to adjust the space around the icon */
+  border-radius: 20%; /* Optional: Apply a border-radius for a rounded background */
+
 }

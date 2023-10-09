@@ -52,10 +52,12 @@
           <div id="messageFormeight" class="chat-box msg_card_body">
             
             <div class="bot-frame">
-              <div class="bot-text">Hello!</div>
+              <div class="bot-text">Hello! Ask me something about the image!</div>
 
             </div>
-            
+            <!--
+            <div class="bot-frame" data-response-id="'+ responseCounter.toString()+'"><div class="bot-text">hihi </div><div class="iconoutlinelike-parent"><button id = "like_btn'+ responseCounter.toString()+'" class="like_btn" alt=""><i class="far fa-thumbs-up like-icon" ></i></button><button id = "dislike_btn'+ responseCounter.toString()+'" class="dislike_btn" alt=""><i class="far fa-thumbs-down dislike-icon" ></i></button></div></div>
+            -->
           </div>
 
           <div class="chat-area">
@@ -182,6 +184,8 @@
 		
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
+          var chatBox = document.getElementById("messageFormeight");
+          chatBox.scrollTop = chatBox.scrollHeight;
 
 					// Send data to the server via AJAX
 					$.ajax({
@@ -193,9 +197,9 @@
 						type: "POST",
 						url: "/get",
 					}).done(function(data) {
-						var botHtml = '<div class="bot-frame" data-response-id="'+ responseCounter.toString()+'"><div class="bot-text">'+data+'</div><div class="iconoutlinelike-parent"><button id = "like_btn'+ responseCounter.toString()+'" class="like_btn" alt=""><i class="far fa-thumbs-up"></i></button><button id = "dislike_btn'+ responseCounter.toString()+'" class="dislike_btn" alt=""><i class="far fa-thumbs-down"></i></button></div></div>';
+						var botHtml = '<div class="bot-frame" data-response-id="'+ responseCounter.toString()+'"><div class="bot-text">'+data+'</div><div class="iconoutlinelike-parent"><button id = "like_btn'+ responseCounter.toString()+'" class="like_btn" alt=""><i class="far fa-thumbs-up like-icon"></i></button><button id = "dislike_btn'+ responseCounter.toString()+'" class="dislike_btn" alt=""><i class="far fa-thumbs-down dislike-icon"></i></button></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
-            var chatBox = document.getElementById('chat-box');
+            var chatBox = document.getElementById("messageFormeight");
             chatBox.scrollTop = chatBox.scrollHeight;
 					});
 				}
