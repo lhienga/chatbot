@@ -1,21 +1,39 @@
 from flask import Flask, render_template, request, jsonify
 from flask import Flask, flash, request, redirect, url_for, render_template
 import os
-from transformers import AutoModelForCausalLM, AutoTokenizer, InstructBlipProcessor, InstructBlipForConditionalGeneration
+from transformers import InstructBlipProcessor, InstructBlipForConditionalGeneration, InstructBlipConfig, AutoModelForVision2Seq
 import torch
 from PIL import Image
 from werkzeug.utils import secure_filename
 import requests
 import pandas as pd
 import time
+from accelerate import infer_auto_device_map, init_empty_weights
+# Load the model configuration.
+config = InstructBlipConfig.from_pretrained("Salesforce/instructblip-vicuna-13b")
 
-#tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
-#model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
-model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
-processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
+# Initialize the model with the given configuration.
+with init_empty_weights():
+    model = AutoModelForVision2Seq.from_config(config)
+    model.tie_weights()
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model.to(device)
+# Infer device map based on the available resources.
+device_map = infer_auto_device_map(model, max_memory={0: "8GiB", 1: "8GiB", 2: "8GiB", 3: "8GiB"},
+                                   no_split_module_classes=['InstructBlipEncoderLayer', 'InstructBlipQFormerLayer',
+                                                            'LlamaDecoderLayer'])
+device_map['language_model.lm_head'] = device_map['language_projection'] = device_map[('language_model.model'
+                                                                                       '.embed_tokens')]
+
+offload = "offload"
+# Load the processor and model for image processing.
+processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-13b", device_map="auto")
+model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-13b",
+                                                             device_map=device_map,
+                                                             offload_folder=offload, offload_state_dict=True)
+#import llama_accelerate_path
+#llama_accelerate_path.apply_to_model(model)
+#device = "cuda" if torch.cuda.is_available() else "cpu"
+#model.to(device)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # Path to save the CSV file
@@ -92,10 +110,12 @@ def chat():
     #img = Image.open("test/20221218_205725.jpg").convert('RGB')
     print("opened img")
     #img = Image.fromarray(img).convert('RGB')
-    
+    start = time.time()
     ans = get_Chat_response(input, img)
+    end = time.time()
+    print("run time", end - start)
     
-    new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None}
+    new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None, "runtime":end-start}
     #data = data.append(new, ignore_index = True)
     data = pd.concat([data, pd.DataFrame([new])], ignore_index=True)
     data.to_csv(CSV_FILE_PATH, index=False)  # Save to CSV
@@ -108,18 +128,18 @@ def get_Chat_response(text, img):
     #for step in range(1000):
         #time.sleep(5)
         global history
-        inputs = processor(images=img, text=text, return_tensors="pt").to(device)
+        inputs = processor(images=img, text=text, return_tensors="pt").to(model.device)
         print("generating output.........")
       
         outputs = model.generate(
                                     **inputs,
                                     do_sample=False,
-                                    num_beams=5,
-                                    max_length=256,
+                                    num_beams=2,
+                                    max_length= 256,
                                     min_length=1,
-                                    top_p=0.9,
+                                    #top_p=0.9,
                                     repetition_penalty=1.5,
-                                    length_penalty=1.0,
+                                    length_penalty=2.0,
                                     temperature=1,
                                 )
         
@@ -145,7 +165,7 @@ if __name__ == '__main__':
     global last_url
     history = []
     last_url = ""
-    data = pd.DataFrame(columns=["id", "image_url", "user_message", "bot_message", "feedback"])
+    data = pd.DataFrame(columns=["id", "image_url", "user_message", "bot_message", "feedback", "runtime"])
 
     # Load data from existing CSV file if available
     if os.path.exists(CSV_FILE_PATH):
