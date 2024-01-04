@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask import Flask, flash, request, redirect, url_for, render_template
 import os
-from transformers import AutoModelForCausalLM, AutoTokenizer, InstructBlipProcessor, InstructBlipForConditionalGeneration
+from transformers import InstructBlipProcessor, InstructBlipForConditionalGeneration, InstructBlipConfig, AutoModelForVision2Seq
 import torch
 from PIL import Image
 from werkzeug.utils import secure_filename
@@ -9,20 +9,14 @@ import requests
 import pandas as pd
 import time
 
-#tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
-#model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
 model = InstructBlipForConditionalGeneration.from_pretrained("Salesforce/instructblip-vicuna-7b")
 processor = InstructBlipProcessor.from_pretrained("Salesforce/instructblip-vicuna-7b")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # Path to save the CSV file
 CSV_FILE_PATH = "response.csv"
-
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "static/uploads"
@@ -92,10 +86,12 @@ def chat():
     #img = Image.open("test/20221218_205725.jpg").convert('RGB')
     print("opened img")
     #img = Image.fromarray(img).convert('RGB')
-    
+    start = time.time()
     ans = get_Chat_response(input, img)
+    end = time.time()
+    print("run time", end - start)
     
-    new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None}
+    new = {"id": id, "image_url": url, "user_message": msg, "bot_message": ans, "feedback": None, "runtime":end-start}
     #data = data.append(new, ignore_index = True)
     data = pd.concat([data, pd.DataFrame([new])], ignore_index=True)
     data.to_csv(CSV_FILE_PATH, index=False)  # Save to CSV
@@ -108,18 +104,19 @@ def get_Chat_response(text, img):
     #for step in range(1000):
         #time.sleep(5)
         global history
-        inputs = processor(images=img, text=text, return_tensors="pt").to(device)
+        inputs = processor(images=img, text=text, return_tensors="pt").to(model.device)
+        print("inputs:", inputs)
         print("generating output.........")
       
         outputs = model.generate(
                                     **inputs,
                                     do_sample=False,
-                                    num_beams=5,
-                                    max_length=256,
+                                    num_beams=2,
+                                    max_length= 256,
                                     min_length=1,
-                                    top_p=0.9,
+                                    #top_p=0.9,
                                     repetition_penalty=1.5,
-                                    length_penalty=1.0,
+                                    length_penalty=2.0,
                                     temperature=1,
                                 )
         
@@ -145,7 +142,7 @@ if __name__ == '__main__':
     global last_url
     history = []
     last_url = ""
-    data = pd.DataFrame(columns=["id", "image_url", "user_message", "bot_message", "feedback"])
+    data = pd.DataFrame(columns=["id", "image_url", "user_message", "bot_message", "feedback", "runtime"])
 
     # Load data from existing CSV file if available
     if os.path.exists(CSV_FILE_PATH):
